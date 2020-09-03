@@ -1,20 +1,74 @@
 // main bot file
+process.env['NTBA_FIX_319'] = 1; // to avoid a deprecation warning
 
-require("dotenv").config();
+require('dotenv').config();
 
-const Discord = require("discord.js");
+const Discord = require('discord.js');
 const client = new Discord.Client();
 
-client.on("ready", () => {
-  console.log(`Discord bot ready!`);
+const TelegramBot = require('node-telegram-bot-api');
+
+const token = process.env.TELE_BOT_TOKEN;
+const bot = new TelegramBot(token, { polling: true });
+
+const channel_id = process.env.CHANNEL_ID;
+
+client.on('ready', () => {
+    console.log(`Discord bot ready!`);
 });
 
-client.on("message", (msg) => {
-  console.log(msg.channel);
+client.on('message', (msg) => {
+    const regExAnnounce = /^@everyone/;
+    // regExAnnounce.test(msg.content) // also works in the if condition
 
-  if (msg.content === "ping") {
-    msg.channel.send("pong");
-  }
+    console.log(`msg.attachments:`);
+
+    // to parse the Map and extract the picture URL
+    let attachmentsWithMsg = JSON.stringify([...msg.attachments]);
+    attachmentsWithMsg = JSON.parse(attachmentsWithMsg);
+
+    // console.log(attachmentsWithMsg[0][1].url);
+    console.log(attachmentsWithMsg.length);
+
+    if (
+        msg.channel.name === 'announcements' &&
+        msg.content.startsWith('@everyone')
+    ) {
+        if (attachmentsWithMsg.length === 0) {
+            console.log(msg.content);
+
+            // msg.channel.send("Sent in announcements channel telegram");
+
+            const msgToSend = msg.content.replace(regExAnnounce, '');
+
+            bot.sendMessage(channel_id, msgToSend).catch((error) => {
+                console.log(error.code); // => 'ETELEGRAM'
+                console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
+            });
+        } else {
+            const msgToSend = msg.content.replace(regExAnnounce, '');
+
+            bot.sendMessage(channel_id, msgToSend).catch((error) => {
+                console.log(error.code); // => 'ETELEGRAM'
+                console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
+            });
+
+            bot.sendPhoto(channel_id, attachmentsWithMsg[0][1].url).catch(
+                (error) => {
+                    console.log(error.code); // => 'ETELEGRAM'
+                    console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
+                }
+            );
+        }
+    } else {
+        console.log(`This message: ${msg.content} didn't have @everyone`);
+    }
+});
+
+bot.on('polling_error', (error) => {
+    console.log(error); // => 'EFATAL'
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
+
+console.log(`Telegram bot ready!`);
