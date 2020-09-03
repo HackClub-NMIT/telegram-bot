@@ -10,7 +10,7 @@ Telegram bot for Hack Club NMIT. Made using Javascript.
 -   Clone the repo and cd into the directory.
 
 ```
-git clone https://github.com/HackClubNMIT/telegram-bot.git && cd telegram-bot
+git clone https://github.com/hackclubnmit/telegram-bot.git && cd telegram-bot
 ```
 
 -   Install the dependencies
