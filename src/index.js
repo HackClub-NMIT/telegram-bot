@@ -3,6 +3,11 @@ process.env['NTBA_FIX_319'] = 1; // to avoid a deprecation warning
 
 require('dotenv').config();
 
+const express = require('express');
+const app = express();
+
+const PORT = 3000;
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
@@ -72,3 +77,14 @@ bot.on('polling_error', (error) => {
 client.login(process.env.DISCORD_BOT_TOKEN);
 
 console.log(`Telegram bot ready!`);
+
+app.get('*', (req, res) => {
+    res.send({
+        message: 'Bot deployed',
+        link: 't.me/hackclubnmit',
+    });
+});
+
+app.listen(process.env.PORT || PORT, () =>
+    console.log(`Express server running on port ${PORT}`)
+);
