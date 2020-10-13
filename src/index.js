@@ -23,7 +23,7 @@ client.on('ready', () => {
 });
 
 client.on('message', (msg) => {
-    const regExAnnounce = /^@everyone/;
+    const regExAnnounce = /@everyone/g;
     // regExAnnounce.test(msg.content) // also works in the if condition
 
     console.log(`msg.attachments:`);
@@ -36,8 +36,9 @@ client.on('message', (msg) => {
     console.log(attachmentsWithMsg.length);
 
     if (
-        msg.channel.name === 'announcements' &&
-        msg.content.startsWith('@everyone')
+        msg.channel.name === 'announcements' ||
+        msg.channel.name === 'yt-videos'
+        // msg.content.startsWith('@everyone')
     ) {
         if (attachmentsWithMsg.length === 0) {
             console.log(msg.content);
@@ -53,20 +54,22 @@ client.on('message', (msg) => {
         } else {
             const msgToSend = msg.content.replace(regExAnnounce, '');
 
-            bot.sendMessage(channel_id, msgToSend).catch((error) => {
+            // bot.sendMessage(channel_id, msgToSend).catch((error) => {
+            //     console.log(error.code); // => 'ETELEGRAM'
+            //     console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
+            // });
+
+            bot.sendPhoto(channel_id, attachmentsWithMsg[0][1].url, {
+                caption: msgToSend,
+            }).catch((error) => {
                 console.log(error.code); // => 'ETELEGRAM'
                 console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
             });
-
-            bot.sendPhoto(channel_id, attachmentsWithMsg[0][1].url).catch(
-                (error) => {
-                    console.log(error.code); // => 'ETELEGRAM'
-                    console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
-                }
-            );
         }
     } else {
-        console.log(`This message: ${msg.content} didn't have @everyone`);
+        console.log(
+            `This message: "${msg.content}" wasn't in the announcements channel`
+        );
     }
 });
 
