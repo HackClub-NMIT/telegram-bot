@@ -23,7 +23,7 @@ client.on('ready', () => {
 });
 
 client.on('message', (msg) => {
-    const regExAnnounce = /@everyone/g;
+    const regExAnnounce = /\s@everyone/g;
     // regExAnnounce.test(msg.content) // also works in the if condition
 
     console.log(`msg.attachments:`);
@@ -45,14 +45,18 @@ client.on('message', (msg) => {
 
             // msg.channel.send("Sent in announcements channel telegram");
 
-            const msgToSend = msg.content.replace(regExAnnounce, '');
+            const msgToSend = msg.content
+                .replace(regExAnnounce, '')
+                .replace(/\*\*/g, '');
 
             bot.sendMessage(channel_id, msgToSend).catch((error) => {
                 console.log(error.code); // => 'ETELEGRAM'
                 console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
             });
         } else {
-            const msgToSend = msg.content.replace(regExAnnounce, '');
+            const msgToSend = msg.content
+                .replace(regExAnnounce, '')
+                .replace(/\*\*/g, '');
 
             // bot.sendMessage(channel_id, msgToSend).catch((error) => {
             //     console.log(error.code); // => 'ETELEGRAM'

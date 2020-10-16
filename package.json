@@ -1,23 +1,24 @@
 {
-  "name": "hack-club-tele-discord",
-  "version": "1.0.0",
-  "description": "A discord-telegram bridge which forwards announcements to a telegram channel",
-  "main": "src/index.js",
-  "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
-  },
-  "author": "Kaushal",
-  "license": "ISC",
-  "dependencies": {
-    "discord.js": "^12.3.1",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "node-telegram-bot-api": "^0.50.0"
-  },
-  "devDependencies": {
-    "eslint": "^7.8.1",
-    "nodemon": "^2.0.4",
-    "prettier": "^2.1.1"
-  }
+    "name": "hack-club-tele-discord",
+    "version": "1.0.0",
+    "description": "A discord-telegram bridge which forwards announcements to a telegram channel",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "node src/index.js",
+        "dev": "nodemon src/index.js",
+        "devStart": "nodemon temp/index-test.js"
+    },
+    "author": "Kaushal",
+    "license": "ISC",
+    "dependencies": {
+        "discord.js": "^12.3.1",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "node-telegram-bot-api": "^0.50.0"
+    },
+    "devDependencies": {
+        "eslint": "^7.11.0",
+        "nodemon": "^2.0.4",
+        "prettier": "^2.1.2"
+    }
 }
